@@ -9,8 +9,8 @@ Created on Fri May 12 10:05:38 2017
 #%%
 import numpy as np
 from numpy import pi, sqrt
-import Fundation
-import Optics 
+import wiselib2.Fundation as Fundation
+import wiselib2.Optics as Optics
 
 
 

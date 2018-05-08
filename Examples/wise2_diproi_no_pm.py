@@ -23,17 +23,17 @@ warnings.filterwarnings("ignore")
 import importlib
 import numpy as np
 
-import Rayman as rm
-import Fundation
-import Optics
-import ToolLib as tl
+import wiselib2.Rayman as rm
+import wiselib2.Fundation as Fundation
+import wiselib2.Optics as Optics
+import wiselib2.ToolLib as tl
 importlib.reload(Fundation)
 importlib.reload(Optics)
 importlib.reload(tl)
 importlib.reload(rm)
 
-from must import *
-from Fundation import OpticalElement
+from wiselib2.must import *
+from wiselib2.Fundation import OpticalElement
 
 
 # SOURCE

@@ -10,9 +10,7 @@ Cose da sistemare
 """
 #%%
 from __future__ import division
-import numpy as np
-#import cmath as cm
-from numpy import  cos, sin, tan, arctan, arctan2, pi, array, arange, size, polyval, polyfit, dot, exp, arcsin, arccos, real, imag
+from numpy import  *
 from numpy.lib.scimath import sqrt
 from wiselib2.ToolLib import Debug
 

@@ -6,19 +6,6 @@ Created on Thu Jul 07 14:24:04 2016
 """
 
 import numpy as np
-from importlib import reload
-
-from numpy import  cos, sin, tan, arctan, arctan2, pi, array, arange, size, polyval, polyfit, angle, dot, exp, arcsin, arccos, real, imag, angle, copy
-from numpy.lib.scimath import sqrt
-from numpy.linalg import norm
-import matplotlib.pyplot as plt
-import matplotlib.pyplot
-plot =  matplotlib.pyplot.plot
-from matplotlib.ticker import FormatStrFormatter
-import time
-from scipy.interpolate import interp1d
-
-from matplotlib.ticker import MultipleLocator
 
 #def GridMinor()
 #ax2.yaxis.set_minor_locator(minorLocator)

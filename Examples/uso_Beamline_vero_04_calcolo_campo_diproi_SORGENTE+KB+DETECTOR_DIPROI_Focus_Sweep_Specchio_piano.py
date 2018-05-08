@@ -13,18 +13,18 @@ Created on Mon Mar 20 11:56:47 2017
 import importlib
 import numpy as np
 
-import Rayman as rm
-import Fundation
-import Optics
-import ToolLib as tl
+import wiselib2.Rayman as rm
+import wiselib2.Fundation as Fundation
+import wiselib2.Optics as Optics
+import wiselib2.ToolLib as tl
 import csv
 importlib.reload(Fundation)
 importlib.reload(Optics)
 importlib.reload(tl)
 importlib.reload(rm)
 
-from must import *
-from Fundation import OpticalElement
+from wiselib2.must import *
+from wiselib2.Fundation import OpticalElement
 
 print(__name__)
 if __name__ == '__main__':
