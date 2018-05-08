@@ -15,7 +15,7 @@ import wiselib2.Rayman as rm
 import wiselib2.Fundation as Fundation
 import wiselib2.Optics as Optics
 import wiselib2.ToolLib as tl
-import wiselib2.FermiSource as Fermi
+import Examples.FermiSource as Fermi
 
 importlib.reload(Fundation)
 importlib.reload(Optics)
@@ -89,7 +89,7 @@ if __name__ == '__main__':
 	kb.CoreOptics.SmallDisplacements.Trans = 0 # Transverse displacement (rispetto al raggio uscente, magari faremo scegliere)
 	kb.CoreOptics.SmallDisplacements.Long = 0 # Longitudinal displacement (idem)
 	# aggiungo figure error
-	kb.CoreOptics.FigureErrorLoad(File = "D:\\Topics\\WISE\\Scripts Sviluppo Fase 2c\\DATI\\kbv.txt", 
+	kb.CoreOptics.FigureErrorLoad(File = "/Users/admin/Desktop/Lavoro/Private/Progetti/OASYS/per luca/DATI/kbv.txt",
 				  Step = 2e-3, # passo del file
 				  AmplitudeScaling = 1*1e-3 # fattore di scala 
 				  )

@@ -5,7 +5,7 @@ Created on Thu Jan 12 11:58:09 2017
 @author: Mic
 """
 from __future__ import division
-import numpy as np
+from numpy import *
 from numpy.linalg import norm
 from wiselib2.must import *
 import inspect 
@@ -180,9 +180,6 @@ def RotXY(x,y, Theta = 0, CentreOfRotation = np.array([0,0])):
 
     Examples
     ----------------
-    >>> import numpt as np
-    >>> RotXY(0,1,45 * np.pi/180)
-    >>> Out[12]: (array([-0.70710678]), array([ 0.70710678]))
     '''
     if Theta == 0:
         return (np.array(x), np.array(y))
