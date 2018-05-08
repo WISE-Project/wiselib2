@@ -124,7 +124,7 @@ if not release:
 
 
 PACKAGES = [
-    "wiselib",
+    "wiselib2",
 ]
 
 PACKAGE_DATA = {

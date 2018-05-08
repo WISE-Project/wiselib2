@@ -10,7 +10,6 @@ Created on Mon Mar 20 11:56:47 2017
 """
 
 import importlib
-import numpy as np
 
 import wiselib2.Rayman as rm
 import wiselib2.Fundation as Fundation
@@ -27,6 +26,10 @@ importlib.reload(Fermi)
 from wiselib2.must import *
 from wiselib2.Fundation import OpticalElement
 
+from matplotlib import pyplot as plt
+
+from numpy import *
+
 print(__name__)
 if __name__ == '__main__':
 
@@ -41,7 +44,7 @@ if __name__ == '__main__':
 	s_pd = Fundation.PositioningDirectives(			# Direttive di posizionamento
 						ReferTo = 'absolute', 
 						XYCentre = [0,0],
-						Angle = np.deg2rad(0))
+						Angle = deg2rad(0))
 	s = OpticalElement(									# Optical Element (la cosa più vicina al pupolo Oasys)
 						s_k, 
 						PositioningDirectives = s_pd, 
@@ -50,7 +53,7 @@ if __name__ == '__main__':
 
 	# PM1A (h)
 	#==========================================================================
-	pm1a_k = Optics.MirrorPlane(L=0.4, AngleGrazing = np.deg2rad(2.5) )
+	pm1a_k = Optics.MirrorPlane(L=0.4, AngleGrazing = deg2rad(2.5) )
 	pm1a_pd = Fundation.PositioningDirectives(
 									ReferTo = 'upstream',
 									PlaceWhat = 'centre',
@@ -65,7 +68,7 @@ if __name__ == '__main__':
 	#==========================================================================
 	f1 = 98
 	f2 = 1.2
-	GrazingAngle = np.deg2rad(2.5)
+	GrazingAngle = deg2rad(2.5)
 	L = 0.4 
 	
 	kb_k = Optics.MirrorElliptic(f1 = f1, f2 = f2 , L= L, Alpha = GrazingAngle)
@@ -82,7 +85,7 @@ if __name__ == '__main__':
 	kb.CoreOptics.ComputationSettings.UseFigureError = True
 	kb.CoreOptics.ComputationSettings.UseRoughness = False 
 	kb.CoreOptics.ComputationSettings.UseSmallDisplacements = False # serve per traslare/ruotare l'EO
-	kb.CoreOptics.SmallDisplacements.Rotation = np.deg2rad(0)
+	kb.CoreOptics.SmallDisplacements.Rotation = deg2rad(0)
 	kb.CoreOptics.SmallDisplacements.Trans = 0 # Transverse displacement (rispetto al raggio uscente, magari faremo scegliere)
 	kb.CoreOptics.SmallDisplacements.Long = 0 # Longitudinal displacement (idem)
 	# aggiungo figure error
@@ -97,7 +100,7 @@ if __name__ == '__main__':
 	#==========================================================================
 	d_k = Optics.Detector(
 						L=400e-6, 
-						AngleGrazing = np.deg2rad(90) )
+						AngleGrazing = deg2rad(90) )
 	d_pd = Fundation.PositioningDirectives(
 						ReferTo = 'upstream',
 						PlaceWhat = 'centre',
@@ -154,7 +157,7 @@ if __name__ == '__main__':
 		I = I/max(I)
 		
 		plt.figure(11)
-		plot(S*1e3, abs(E)**2/max(abs(E)**2))
+		plt.plot(S*1e3, abs(E)**2/max(abs(E)**2))
 		plt.xlabel('mm')
 		plt.title('|E| (mirror)')
 
@@ -165,7 +168,7 @@ if __name__ == '__main__':
 		Id = Id/max(Id)
 		
 		plt.figure(13)
-		plot(Sd*1e3, np.abs(Ed))
+		plt.plot(Sd*1e3, abs(Ed))
 		plt.xlabel('mm')
 		plt.title('|E|^2 (detector)')		
 		
@@ -173,7 +176,7 @@ if __name__ == '__main__':
 
 #%% Caustica
 
-	DefocusList = np.linspace(-6e-3, 1e-3,   21)
+	DefocusList = linspace(-6e-3, 1e-3,   21)
 	DefocusList_mm = DefocusList * 1e3
 	
 	
@@ -189,7 +192,7 @@ if __name__ == '__main__':
 	if 1==1:
 		plt.figure(23)
 		for Res in ResultList:
-			plot(Res.S *1e6, abs(Res.Field))
+			plt.plt.plot(Res.S *1e6, abs(Res.Field))
 			plt.title('Campo')
 			plt.xlabel('um')
 			
@@ -198,8 +201,8 @@ if __name__ == '__main__':
 #%% Plot della HEW
 	
 	plt.figure(32)
-	plot(DefocusList_mm, HewList,'.')
-	plot(DefocusList_mm, 2*0.68* SigmaList,'x')
+	plt.plt.plot(DefocusList_mm, HewList,'.')
+	plt.plt.plot(DefocusList_mm, 2*0.68* SigmaList,'x')
 	
 	plt.xlabel('defocus (mm)')
 	plt.ylabel('Hew')

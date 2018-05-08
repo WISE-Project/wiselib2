@@ -9,4 +9,4 @@ from __future__ import division
 from numpy import *
 
 def Range(Start, Stop, Step):
-	return arange(Start, Stop+Step, Step)
+    return arange(Start, Stop+Step, Step)

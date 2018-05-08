@@ -44,44 +44,44 @@ Lambda = 5e-9
 # Gaussian Source (if used)
 FermiFactor = {'fel1' : 1.25, 'fel2':1.5}['fel2']
 FermiSigma = FermiFactor * Lambda * 1e9
-FermiWaist = FermiSigma * np.sqrt(2)	
+FermiWaist = FermiSigma * np.sqrt(2)    
 FermiDivergence = Lambda / np.pi/FermiWaist
 
 
 s = OpticalElement(
-				Optics.SourceGaussian(Lambda, FermiWaist, PropagationAngle = 0*0.0008257924757473173 ), 
-				PositioningDirectives = Fundation.PositioningDirectives(
-						ReferTo = 'absolute', 
-						XYCentre = [0,1],
-						Angle = np.deg2rad(0)), 
-				Name = 'source', IsSource = True)
+                Optics.SourceGaussian(Lambda, FermiWaist, PropagationAngle = 0*0.0008257924757473173 ), 
+                PositioningDirectives = Fundation.PositioningDirectives(
+                        ReferTo = 'absolute', 
+                        XYCentre = [0,1],
+                        Angle = np.deg2rad(0)), 
+                Name = 'source', IsSource = True)
 
 #----------------------------------------------------
 # kb1
 #----------------------------------------------------
 kb1 = OpticalElement(
-				Optics.MirrorElliptic(
-						f1 = 98.5, f2 = 1.180, L= 0.4, Alpha = np.deg2rad(2)), 
-				PositioningDirectives = Fundation.PositioningDirectives(
-						ReferTo = 'upstream',
-						PlaceWhat = 'upstream focus',
-						PlaceWhere = 'centre',
-						Distance = 98.5), 
-				Name = 'kb1')
-			
+                Optics.MirrorElliptic(
+                        f1 = 98.5, f2 = 1.180, L= 0.4, Alpha = np.deg2rad(2)), 
+                PositioningDirectives = Fundation.PositioningDirectives(
+                        ReferTo = 'upstream',
+                        PlaceWhat = 'upstream focus',
+                        PlaceWhere = 'centre',
+                        Distance = 98.5), 
+                Name = 'kb1')
+            
 #----------------------------------------------------
 # det (detector)
 #----------------------------------------------------
 det = OpticalElement(
-				Optics.OpticsNumericalDependent(
-						ParentOptics = kb1.CoreOptics, 
-						GetXYFunction = kb1.CoreOptics.GetXY_TransversePlaneAtF2,  
-						N = 200,
-						L = 50e-6,
-						Defocus = 0,
-						ReferenceFrame = 'lab') , 
-				PositioningDirectives = None, # they are not necessary
-				Name = 'det')
+                Optics.OpticsNumericalDependent(
+                        ParentOptics = kb1.CoreOptics, 
+                        GetXYFunction = kb1.CoreOptics.GetXY_TransversePlaneAtF2,  
+                        N = 200,
+                        L = 50e-6,
+                        Defocus = 0,
+                        ReferenceFrame = 'lab') , 
+                PositioningDirectives = None, # they are not necessary
+                Name = 'det')
 #----------------------------------------------------
 #% Creo la sequenza di elementi
 t = Fundation.BeamlineElements()
