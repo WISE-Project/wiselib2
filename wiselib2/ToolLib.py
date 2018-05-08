@@ -7,7 +7,7 @@ Created on Thu Jan 12 11:58:09 2017
 from __future__ import division
 import numpy as np
 from numpy.linalg import norm
-from must import * 
+from wiselib2.must import *
 import inspect 
 from _ast import arg
 #================================================================

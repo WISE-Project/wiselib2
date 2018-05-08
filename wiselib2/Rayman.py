@@ -14,7 +14,7 @@ import numpy as np
 #import cmath as cm
 from numpy import  cos, sin, tan, arctan, arctan2, pi, array, arange, size, polyval, polyfit, dot, exp, arcsin, arccos, real, imag
 from numpy.lib.scimath import sqrt
-from ToolLib import Debug
+from wiselib2.ToolLib import Debug
 
 from  scipy import ndimage
 import multiprocessing

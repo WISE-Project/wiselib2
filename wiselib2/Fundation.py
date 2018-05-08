@@ -4,17 +4,17 @@
 '''
 
 from __future__ import division
-from must import * 
-import Optics
-import Rayman as rm
-import ToolLib as tl
-from ToolLib import  Debug
+from wiselib2.must import *
+import wiselib2.Optics
+import wiselib2.Rayman as rm
+import wiselib2.ToolLib as tl
+from wiselib2.ToolLib import Debug
 import inspect
 from collections import OrderedDict
 import numpy as np
 import copy
 
-from Optics import TypeOfAngle
+from wiselib2.Optics import TypeOfAngle
 
 
 #=============================

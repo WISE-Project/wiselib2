@@ -7,14 +7,14 @@ Created on Mon Aug 08 16:10:57 2016
 """
 from __future__ import division
 import sys
-from must import *
+from wiselib2.must import *
 import matplotlib.pyplot as plt
-import ToolLib as tl 
-from ToolLib import UnitVector, Ray, Line, CheckArg, geom, ErrMsg, Debug
+import wiselib2.ToolLib as tl
+from wiselib2.ToolLib import UnitVector, Ray, Line, CheckArg, geom, ErrMsg, Debug
 
-import Noise as Noise
-import Rayman as rm
-from Rayman import Range, FastResample1d, _MatchArrayLengths
+import wiselib2.Noise as Noise
+import wiselib2.Rayman as rm
+from wiselib2.Rayman import Range, FastResample1d, _MatchArrayLengths
 import numpy as np
 from numpy import pi
 

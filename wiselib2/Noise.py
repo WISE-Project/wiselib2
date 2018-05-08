@@ -5,9 +5,9 @@ Created on Thu Jul 07 14:08:31 2016
 @author: Mic
 """
 from __future__ import division
-from must import *
+from wiselib2.must import *
 import numpy as np
-import Rayman as rm
+import wiselib2.Rayman as rm
 Gauss1d =  lambda x ,y : None
 from scipy import interpolate as interpolate
 
