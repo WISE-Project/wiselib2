@@ -5,7 +5,7 @@ Created on Thu Jan 12 11:58:09 2017
 @author: Mic
 """
 from __future__ import division
-from numpy import *
+import numpy as np
 from numpy.linalg import norm
 from wiselib2.must import *
 import inspect 
@@ -66,9 +66,18 @@ class Debug():
                     
     
 
-
-
         
+#================================================================
+#  IsArray
+#================================================================
+def IsArray(x):
+    return isinstance(x,np.ndarray)
+
+#================================================================
+#  IsScalar
+#================================================================
+def IsScalar(x):
+    return isinstance(x,float) or isinstance(x,int)    
             
         
 #================================================================
@@ -85,13 +94,13 @@ def CheckArg(NotNoneArgs, NoneArgs = []):
 
     '''
 
-    a = all([arg != None for arg in NotNoneArgs])
-    #a = (NotNoneArgs != None) # all the elements ARE != None
+    a = np.all([arg is not None for arg in NotNoneArgs])
+
     if len(NoneArgs) == 0:
         return a
     else:
-        return a and all([arg ==None for arg in NoneArgs])
-        #return a and (NoneArgs == None)
+        return a and np.all([arg is None for arg in NoneArgs])
+        #return a and (NoneArgs is None)
 
 def Oversample(x = np.array([]), N=1):
     '''
@@ -151,8 +160,8 @@ def RMat(Theta):
     '''
     Returns the rotation matrix for an angle Theta.
     '''
-    return [[cos(Theta), -sin(Theta)],
-                [sin(Theta), cos(Theta)]]
+    return [[np.cos(Theta), -np.sin(Theta)],
+                [np.sin(Theta), np.cos(Theta)]]
 
 #================================================================
 #  RotXY
@@ -185,7 +194,7 @@ def RotXY(x,y, Theta = 0, CentreOfRotation = np.array([0,0])):
         return (np.array(x), np.array(y))
     Theta = -Theta # non so perché il -1, odio le matrici di rotazione.
     Vxy = np.column_stack((x,y))
-    U  = dot(Vxy - CentreOfRotation, RMat(Theta)) + CentreOfRotation
+    U  = np.dot(Vxy - CentreOfRotation, RMat(Theta)) + CentreOfRotation
     return (U[:,0], U[:,1])
 
 #================================================================
@@ -305,6 +314,58 @@ def UnitVectorReflect(v, n):
     return u
 
 #================================
+#  FitSphericalWave
+#================================
+def FitSphericalWave1d(Phi,s, Lambda):
+    '''
+    
+    Performs the quadratic fit over the phase Phi and returns the curvature 
+    Radii.
+    
+    Interpolation kernel copied from:
+    From: http://scipy-cookbook.readthedocs.io/items/Least_Squares_Circle.html
+    
+    Parameters
+    -----
+    Phi : array like
+        phase of the spherical wave
+        
+    s : array
+        coordinate points.
+
+    '''
+    x = s 
+    y = Phi * Lambda/2/np.pi # convertion from phase to heigth profile
+     
+    from scipy import optimize
+    method_2 = "leastsq"
+    # coordinates of the barycenter
+    x_m = np.mean(x)
+    y_m = np.mean(y)
+
+    def calc_R(xc, yc):
+        """ calculate the distance of each 2D points from the center (xc, yc) """
+        return sqrt((x-xc)**2 + (y-yc)**2)
+    
+    def f_2(c):
+        """ calculate the algebraic distance between the data points and the mean circle centered at c=(xc, yc) """
+        Ri = calc_R(*c)
+        return Ri - Ri.mean()
+    
+    center_estimate = x_m, y_m
+    center_2, ier = optimize.leastsq(f_2, center_estimate)
+    
+    xc_2, yc_2 = center_2
+    Ri_2       = calc_R(*center_2)
+    R_2        = Ri_2.mean()                  #_2 is because this is method#2 from the url I copied from.
+    residu_2   = sum((Ri_2 - R_2)**2)
+#    residu2_2  = sum((Ri_2**2-R_2**2)**2)
+#    ncalls_2   = f_2.ncalls        
+    
+    
+    return R_2
+
+#================================
 #  FitGaussian1d
 #================================
 def FitGaussian1d(y, x = None, PlotFigure=None):
@@ -324,7 +385,7 @@ def FitGaussian1d(y, x = None, PlotFigure=None):
         return a*exp(-(x-x0)**2/(2*sigma**2))
     #------------------------------------------
     n = len(y)
-    if x == None:
+    if x is None:
         x = np.arange(0,N)
     
     mean = sum(x*y)/n    
@@ -416,7 +477,122 @@ def MinHew(Hew, Threshold = 1e-15):
     First = next(i for i in range(len(Bools)) if Bools[i]  == True)
     Last = next(i for i in np.arange(len(Bools)-1,-1,-1) if Bools[i]  == True)
     
+    #Performs a quadratic fit
+        
     return int(np.floor( (First + Last)/2))
+
+
+
+#================================
+#  FitParabola
+#================================
+def FitParabola(x, y ):
+    """
+    Helper function that performs a parabolic fit on x,y and returns
+    the parabola parameter in a common fashion
+    
+    Parameters
+    -----
+    x : array
+        x
+    y : array
+        y
+        
+    Return
+    ------
+    Struct containing:
+        a,b,c,Focus, Vertex
+    
+    """
+    
+    class Output:
+        a = None
+        b = None
+        c = None
+        Focus = None
+        Vertex = None
+    
+    #Performs a quadratic fit
+    p = np.polyfit(x,y,2)
+    a = p[0]
+    b = p[1]
+    c = p[2]
+    Delta = b**2  -4*a*c
+    
+    xv = -b/2/a           # Vertex
+    yv = -Delta/4/a
+    
+    xf = -b/2/a           # focus
+    yf = (1-Delta)/a/a ; 
+    
+    Output.a = a 
+    Output.b = b
+    Output.c = c
+    Output.Focus = np.array([xf,yf])
+    Output.Vertex= np.array([xv,yv])
+    
+    return Output
+#================================
+#  FindWaist
+#================================
+def FindWaist(W, Z = None, Threshold = 1e-15):
+    '''
+    Find the waist of the beam of transverse size W and longitudinal axis Z.
+    
+    Parameters
+    -----
+    W : array like
+        Beam size, typically the HEW (or the sigma, or whatever). It must have 
+        a local minimum
+        
+    Z : array like
+        longitudinal coordinate
+    
+    Return
+    -----
+    NumericWaist : (position, size) 
+        coordinates of the minimum of (W,Z) found as the minimum value of W 
+        
+    FittedWaist : (position, size)
+        coordinates of the minimum of (W,Z) computed with a parabolic fit
+    
+    '''
+    iMin = np.argmin(W)            # position of the minimum
+    Delta = W - W[iMin]        # differences.
+    Bools = Delta < Threshold
+    
+    # find the first True value
+    First = next(i for i in range(len(Bools)) if Bools[i]  == True)
+    Last = next(i for i in np.arange(len(Bools)-1,-1,-1) if Bools[i]  == True)
+    
+    MinIndex = int(np.floor( (First + Last)/2))    # position of the central minimum
+    MinValue = W[MinIndex]
+    MinZ = Z[MinIndex] if Z != None else MinValue
+    
+    Fit = FitParabola(Z,W)
+    
+    MinFitValue = Fit.Vertex[1]
+    MinFitZ = Fit.Vertex[0]
+    
+    NumericWaist = (MinZ, MinValue)
+    FittedWaist = (MinFitZ, MinFitValue)
+    
+    return NumericWaist, FittedWaist
+    
+    
+    
+
+
+    
+    
+    
+    
+        
+    
+    return 
+
+
+
 #================================
 #  PhaseUnwrap
 #================================        
@@ -748,7 +924,7 @@ class geom:
 #            return self._XYOrigin
 #        @XYOrigin.setter
 #        def    XYOrigin(self,XY):
-#            if XY== None : exit
+#            if XYis None : exit
 #            self._XYOrigin = XY
 #            self._q = XY[1] - self.m * XY[0]
 #
@@ -1241,7 +1417,7 @@ class Vector(object):
         x1 = XYEnd[0] + ShiftX
         y1 = XYEnd[1] + ShiftY
             
-        ArrowWidth = 0.5 * Length if ArrowWidth == None else ArrowWidth
+        ArrowWidth = 0.5 * Length if ArrowWidth is None else ArrowWidth
             
         ax.arrow(x0,y0,Length*(x1-x0), Length*(y1-y0), 
                    head_width = ArrowWidth, head_length= ArrowLength, 
@@ -1286,7 +1462,7 @@ class Ray(Vector):
             self.XYOrigin = XYOrigin
         elif CheckArg([vx, vy]):
             Vector.__init__(self, vx = vx, vy = vy, IsUnitVector = True )
-        elif all([Arg == None for Arg in [x0,y0,x1,y1,XYOrigin, Angle,FocalLength]]):
+        elif all([Arg is None for Arg in [x0,y0,x1,y1,XYOrigin, Angle,FocalLength]]):
 #                print('Ray.__init__ : empty Ray was initialized')
 #                raise ValueError('A very specific bad thing happened')
             pass
@@ -1295,7 +1471,7 @@ class Ray(Vector):
             raise ValueError('A very specific bad thing happened')
              # Update further parameters (common procedure)
              
-        self.XYOrigin = [0,0] if XYOrigin == None else XYOrigin
+        self.XYOrigin = [0,0] if XYOrigin is None else XYOrigin
         self.FocalLength = FocalLength
 
     #======================
@@ -1334,7 +1510,7 @@ class Ray(Vector):
         return norm(self._FocalLength)
     @FocalLength.setter
     def FocalLength(self, value):
-        value = float('inf') if value == None else value
+        value = float('inf') if value is None else value
         self._FocalLength = value
         self._XYFocus = self._XYOrigin + self._FocalLength * Normalize(self.v) if self._FocalLength < float('inf') else float('inf')
     
@@ -1425,7 +1601,7 @@ class Ray_seminuovo(object):
             self.v = RotVersor([1,0], Angle)
             self.m = self.v[1]/self.v[0]
             self.q = XYOrigin[1] - self.m * XYOrigin[0]
-        elif all([Arg == None for Arg in [x0,y0,x1,y1,XYOrigin, Angle,FocalLength]]):
+        elif all([Arg is None for Arg in [x0,y0,x1,y1,XYOrigin, Angle,FocalLength]]):
 #                print('Ray.__init__ : empty Ray was initialized')
 #                raise ValueError('A very specific bad thing happened')
             pass
