@@ -1,0 +1,4 @@
+recursive-include wiselib2 *.pyx
+recursive-include wiselib2 *.py
+
+include README.txt
