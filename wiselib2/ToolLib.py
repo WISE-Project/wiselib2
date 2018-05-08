@@ -8,7 +8,10 @@ from __future__ import division
 import numpy as np
 from numpy.linalg import norm
 from wiselib2.must import *
-import inspect 
+import inspect
+
+from matplotlib import pyplot as plt
+
 from _ast import arg
 #================================================================
 #  ErrMsg
@@ -345,7 +348,7 @@ def FitSphericalWave1d(Phi,s, Lambda):
 
     def calc_R(xc, yc):
         """ calculate the distance of each 2D points from the center (xc, yc) """
-        return sqrt((x-xc)**2 + (y-yc)**2)
+        return np.sqrt((x-xc)**2 + (y-yc)**2)
     
     def f_2(c):
         """ calculate the algebraic distance between the data points and the mean circle centered at c=(xc, yc) """
@@ -386,7 +389,7 @@ def FitGaussian1d(y, x = None, PlotFigure=None):
     #------------------------------------------
     n = len(y)
     if x is None:
-        x = np.arange(0,N)
+        x = np.arange(0, n)
     
     mean = sum(x*y)/n    
     sigma = np.sqrt(sum(y*(x-mean)**2)/n)
@@ -400,10 +403,10 @@ def FitGaussian1d(y, x = None, PlotFigure=None):
     if PlotFigure!= None:
         if PlotFigure> 1:
             plt.figure(PlotFigure)
-            plot(x,y)
+            plt.plot(x,y)
             xfit = np.linspace(min(x), max(x), 100)
             yfit = gaus(xfit,popt[0], popt[1], popt[2])
-            plot(xfit,yfit,'o')
+            plt.plot(xfit,yfit,'o')
         
     return popt
     #================================
@@ -1384,7 +1387,7 @@ class Vector(object):
         ''' Returns a UnitVector object which is normal to this objkect'''
         import copy
         _Versor = copy.deepcopy(self)
-        _Versor.Rotate(+pi/2)
+        _Versor.Rotate(+np.pi/2)
         return _Versor
         
     #======================
@@ -1399,7 +1402,7 @@ class Vector(object):
         '''
         import copy
         _v = copy.deepcopy(self)
-        _v.Rotate(+pi/2)
+        _v.Rotate(+np.pi/2)
         return _v
     #======================
     # METHOD: Paint

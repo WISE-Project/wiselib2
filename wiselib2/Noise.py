@@ -11,6 +11,8 @@ import wiselib2.Rayman as rm
 Gauss1d =  lambda x ,y : None
 from scipy import interpolate as interpolate
 
+from matplotlib import pyplot as plt
+
 class PsdFuns:
 	'''
 	Ensemble of possible Psd Functions.
@@ -72,11 +74,11 @@ def PsdArray2Noise_1d_v2(f_in, Psd_in, L_mm,N):
 
 	##vecchia riga
 	##fSpline = (np.array(range(N2))+1)/L_um # um^-1
-	fSpline = arange(N2)/N2 * (max(ff) - min(ff)) + min(ff)
+	fSpline = np.arange(N2)/N2 * (max(ff) - min(ff)) + min(ff)
 
 	fun = interpolate.splrep(log(ff), log(yy), s=2)
 	yPsd_log = interpolate.splev(log(fSpline), fun)
-	ySpline = exp(yPsd_log)
+	ySpline = np.exp(yPsd_log)
 	yPsd = ySpline
 
 	# tolgo
@@ -84,8 +86,8 @@ def PsdArray2Noise_1d_v2(f_in, Psd_in, L_mm,N):
 	n = len(yPsd)
 
 
-	plot(fSpline, yPsd,'-')
-	plot(ff, yy,'x')
+	plt.plot(fSpline, yPsd,'-')
+	plt.plot(ff, yy,'x')
 	plt.legend(['ySpline','Data'])
 	ax = plt.axes()
 	#ax.set_yscale('log')
@@ -94,11 +96,11 @@ def PsdArray2Noise_1d_v2(f_in, Psd_in, L_mm,N):
 	#% controllo RMS integrando la yPsd
 	import scipy.integrate as integrate
 
-	RMS = sqrt(integrate.trapz(yPsd, fSpline/1000))
+	RMS = np.sqrt(integrate.trapz(yPsd, fSpline/1000))
 
 	#%  Modo Manfredda style
 
-	#yPsdNorm = sqrt(yPsd/L_um/1000)
+	#yPsdNorm = np.sqrt(yPsd/L_um/1000)
 	#yPsdNorm_reverse = yPsdNorm[::-1]
 	yPsd_reverse = yPsd[::-1]
 	ell= 1/(fSpline[1] - fSpline[0])
@@ -107,21 +109,21 @@ def PsdArray2Noise_1d_v2(f_in, Psd_in, L_mm,N):
 		yPsd2 = np.hstack((yPsd_reverse ,0,yPsd[0:-1]))
 	else:
 		yPsd2 = np.hstack((yPsd_reverse ,0,yPsd))
-	##yPsd2Norm = sqrt(yPsd2/ell/1000/2)
-	yPsd2Norm = sqrt(yPsd2/ell/1000)
+	##yPsd2Norm = np.sqrt(yPsd2/ell/1000/2)
+	yPsd2Norm = np.sqrt(yPsd2/ell/1000)
 	n_ = len(yPsd2)
 	print('len(yPsd2) = %0.2d' % len(yPsd2Norm))
-	phi = 2*pi * np.random.rand(n_)
-	r = exp(1j*phi)
+	phi = 2*np.pi * np.random.rand(n_)
+	r = np.exp(1j*phi)
 
 	yPsd2Norm_ = fftshift(yPsd2Norm)
 	#yPsd2Norm_[len(yPsd2Norm_)//2] = 0
 
 	yRaf = np.fft.fft(r*yPsd2Norm_)
-	yRaf = real(yRaf)
+	yRaf = np.real(yRaf)
 	print('Rms = %0.2e nm' % np.std(yRaf))
 
-	plot(yPsd2Norm_)
+	plt.plot(yPsd2Norm_)
 
 	print('max yPsd_ = %d nm' % max(yPsd2))
 	print('max yPsd2Norm = %0.4f nm' % max(yPsd2Norm))
@@ -165,12 +167,12 @@ def PsdArray2Noise_1d(PsdArray, N, Semiaxis = True, Real = True):
 		else:
 			print('Error!  len(PsdArrayNew) - len(PsdArray) = %0d' % idelta)
 	y = np.fft.fftshift(PsdArrayNew)
-	r = 2*pi * np.random.rand(len(PsdArrayNew))
+	r = 2*np.pi * np.random.rand(len(PsdArrayNew))
 
-	f = np.fft.ifft(y * exp(1j*r))
+	f = np.fft.ifft(y * np.exp(1j*r))
 
 	if Real:
-		return real(f)
+		return np.real(f)
 	else:
 		return f
 Psd2Noise_1d = PsdArray2Noise_1d
@@ -185,10 +187,10 @@ def NoNoise_1d(N, *args):
 #============================================================================
 def GaussianNoise_1d(N,dx, Sigma):
 	'''
-	PSD(f) = exp(-0.5^f/Sigma^2)
+	PSD(f) = np.exp(-0.5^f/Sigma^2)
 	'''
 	x = np.linspace( - N//2 *dx, N//2-1 * dx,N)
-	y = exp(-0.5*x**2/Sigma**2)
+	y = np.exp(-0.5*x**2/Sigma**2)
 	return Psd2NoisePattern_1d(y)
 
 
@@ -244,8 +246,8 @@ def FitPowerLaw(x,y):
 	b = pOut[1]
 	a = pOut[0]
 
-#	indexErr = np.sqrt( covar[0][0] )
-#	ampErr = np.sqrt( covar[1][1] ) * amp
+#	indexErr = np.np.sqrt( covar[0][0] )
+#	ampErr = np.np.sqrt( covar[1][1] ) * amp
 
 	return a,b
 
@@ -539,8 +541,8 @@ class RoughnessMaker(object):
 		fPsd, yPsd = self.PsdEval(N, df)
 
 
-		plot(fPsd, np.log10(yPsd),'x')
-		plot(ff, np.log10(yy),'.r')
+		plt.plot(fPsd, np.log10(yPsd),'x')
+		plt.plot(ff, np.log10(yy),'.r')
 		plt.legend(['Evaluated data', 'Stored data'])
 		plt.suptitle('Usage of stored data (PSD)')
 

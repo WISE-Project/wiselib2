@@ -4406,7 +4406,7 @@ class MirrorSpheric(Mirror):
 		m = -1/p2[0]
 		theta = np.arctan(m)
 		thetaNorm = np.arctan(p2[0])
-		DeltaXY = Defocus * array([np.cos(thetaNorm), np.sin(thetaNorm)])
+		DeltaXY = Defocus * np.array([np.cos(thetaNorm), np.sin(thetaNorm)])
 		XY = self.XYF2 + DeltaXY
 #		q = - self.XYF2[0] * m
 		q = XY[1] - XY[0] * m
@@ -4492,7 +4492,7 @@ class MirrorSpheric(Mirror):
 			in the point x0,y0
 		'''
 		m = -self.b**2 / self.a**2 * x0/y0
-		return arctan(m)
+		return np.arctan(m)
 
 
 	#================================
@@ -4749,10 +4749,10 @@ class MirrorSpheric(Mirror):
 		End = XEnd
 		a = self.a
 		b = self.b
-		if size(End) == 1:
+		if np.size(End) == 1:
 			xEll = End
 			yEll = self.EvalY(xEll)
-		elif size(End) == 2:
+		elif np.size(End) == 2:
 			xEll = End[0]
 			yEll = End[1]
 
