@@ -21,9 +21,9 @@ from wiselib2.Optics import TypeOfAngle
 #     DICT: INSERT_MODE
 #=============================
 class INSERT_MODE:
-	After = 1
-	Before = 2
-	Fork = 3
+	AFTER = 1
+	BEFORE = 2
+	FORK = 3
 
 ##=============================
 ##     DICT: POSITIONING_MODE
@@ -53,10 +53,10 @@ class ComputationResults(object):
 #===========================================================================
 class PropagationInfo(object):
 	class Method:
-		Numerical= 'numerical'
-		Analytical= 'analytical'
-		Ignore = 'ignore'
-		AnaltyticalSource = 'analytical source'
+		NUMERICAL= 'numerical'
+		ANALYTICAL= 'analytical'
+		IGNORE = 'ignore'
+		ANALYTICAL_SOURCE = 'analytical source'
 	
 	def __init__(self, Ignore = False):
 		self.Ignore = Ignore
@@ -66,10 +66,10 @@ class PropagationInfo(object):
 #===========================================================================
 class ComputationSettingsForOpticalElement(object):
 	class Method:
-		Numerical= 'numerical'
-		Analytical= 'analytical'
-		Ignore = 'ignore'
-		AnaltyticalSource = 'analytical source'
+		NUMERICAL= 'numerical'
+		ANALYTICAL= 'analytical'
+		IGNORE = 'ignore'
+		ANALYTICAL_SOURCE = 'analytical source'
 	
 	def __init__(self, Ignore = False):
 		self.Ignore = Ignore
@@ -92,30 +92,42 @@ class PositioningDirectives:
 	'''
 	_PropList = ['ReferTo', 'What', 'Where', 'GrazingAngle',
 				   'Distance', 'XYCentre', 'Angle', 'WhichAngle']
+
 	class What:
-		Centre = 'centre'
-		UpstreamFocus= 'upstream focus'
-		DownstreamFocus= 'downstream focus'
+		CENTRE = 'centre'
+		UPSTREAM_FOCUS = 'upstream focus'
+		DOWNSTREAM_FOCUS = 'downstream focus'
+
+		def tuple(self):
+			return [self.CENTRE, self.UPSTREAM_FOCUS, self.DOWNSTREAM_FOCUS]
 
 	class Where:
-		Centre = 'centre'
-		UpstreamFocus= 'upstream focus'
-		DownstreamFocus= 'downstream focus'
+		CENTRE = 'centre'
+		UPSTREAM_FOCUS= 'upstream focus'
+		DOWNSTREAM_FOCUS= 'downstream focus'
+
+		def tuple(self):
+			return [self.CENTRE, self.UPSTREAM_FOCUS, self.DOWNSTREAM_FOCUS]
 
 	class ReferTo:
-		AbsoluteReference = 'absolute'
-		UpstreamElement = 'upstream'
-		DownstreamElement = 'downstream'
-		DoNotMove = 'fix'
-		
+		ABSOLUTE_REFERENCE = 'absolute'
+		UPSTREAM_ELEMENT = 'upstream'
+		DOWNSTREAM_ELEMENT = 'downstream'
+		DO_NOT_MOVE = 'fix'
+
+		def tuple(self):
+			return [self.ABSOLUTE_REFERENCE, self.UPSTREAM_ELEMENT, self.DOWNSTREAM_ELEMENT, self.DO_NOT_MOVE]
+
 	class WhichAngle:
-		AxisOfTheSelfReferenceFrame = 'self' #default configuration
-		FirstArmOfEllipticMirror = 'arm1'
-		SecondArmOfEllipticMirror= 'arm2'
-		
-		
+		AXIS = 'axis' #default configuration
+		INPUT = 'input'
+		OUTPUT = 'output'
+		FIRST_ARM_OF_ELLIPITICAL_MIRROR = 'arm1'
+		SECOND_ARM_OF_ELLIPITICAL_MIRROR= 'arm2'
+		#AXIS_OF_THE_SELF_REFERENCE_FRAME = 'self'
 
-
+		def tuple(self):
+			return [self.AXIS, self.INPUT, self.OUTPUT, self.FIRST_ARM_OF_ELLIPITICAL_MIRROR, self.SECOND_ARM_OF_ELLIPITICAL_MIRROR]
 
 
 	def __init__(self, ReferTo = 'upstream', PlaceWhat = 'centre', PlaceWhere = 'centre',
@@ -341,10 +353,10 @@ class Tree(object):
     #     Insert
     #================================================
 	def Insert(self,
-			NewItem, 
-			ExistingName = None, 
-			Mode = INSERT_MODE.After,
-			NewName = None):
+			   NewItem,
+			   ExistingName = None,
+			   Mode = INSERT_MODE.AFTER,
+			   NewName = None):
 	
 		'''
 		Paramters
@@ -379,7 +391,7 @@ class Tree(object):
 
 			ItemA = self._Items[ExistingName]
 			# INSERT AFTER (default)
-			if Mode == INSERT_MODE.After :
+			if Mode == INSERT_MODE.AFTER :
 				# Update NewItem (second, or middle)
 				NewItem.Parent = ItemA
 				NewItem.Children = ItemA.Children
@@ -390,7 +402,7 @@ class Tree(object):
 				for Child in NewItem.Children:
 					Child.Parent = NewItem
 			# INSERT BEFORE
-			elif Mode == INSERT_MODE.Before:
+			elif Mode == INSERT_MODE.BEFORE:
 				# NewItem will be the first one of the tree
 				if ItemA.Parent is None:
 					# update NewItem
@@ -405,7 +417,7 @@ class Tree(object):
 					pass
 					# codice da fare per 'INSERT BEFORE
 			# FORK
-			elif Mode == INSERT_MODE.Fork:
+			elif Mode == INSERT_MODE.FORK:
 				NewItem.Parent = ItemA
 				ItemA.Children.append(NewItem)
 
@@ -430,7 +442,7 @@ class Tree(object):
 		self.Insert(NewItem,
 					ExistingName = ExistingItem,
 					NewName = NewName,
-					Mode = INSERT_MODE.After)
+					Mode = INSERT_MODE.AFTER)
     #================================================
     #     GetFromTo
     #================================================
@@ -1499,11 +1511,11 @@ def PositioningDirectives_UpdatePosition(oeY: OpticalElement, oeX: OpticalElemen
 	# Created for leaving the allipse AxisOrigin into [0,0].
 	# Actually it is not that safe.
 	#-------------------------------------------
-	if 	Pd.ReferTo == posdir_.ReferTo.DoNotMove:
+	if 	Pd.ReferTo == posdir_.ReferTo.DO_NOT_MOVE:
 		pass
 	# ABSOLUTE POSITIONING
 	#-------------------------------------------
-	elif Pd.ReferTo == posdir_.ReferTo.AbsoluteReference:
+	elif Pd.ReferTo == posdir_.ReferTo.ABSOLUTE_REFERENCE:
 		
 		Debug.print('Absolute positioning', _DebugTab+1)
 		
@@ -1517,7 +1529,7 @@ def PositioningDirectives_UpdatePosition(oeY: OpticalElement, oeX: OpticalElemen
 			  
 	# Reference = PREVIOUS ELEMENT or DOWNSTREAM ELEMENT or SOURCE
 	#-----------------------------------------------------------------
-	elif ((Pd.ReferTo == posdir_.ReferTo.UpstreamElement) or (Pd.ReferTo == 'source')):
+	elif ((Pd.ReferTo == posdir_.ReferTo.UPSTREAM_ELEMENT) or (Pd.ReferTo == 'source')):
 
 		Debug.print('positioning respect with upstream element', _DebugTab+1)
 		RayIn = oeX.CoreOptics.RayOutNominal	# the incident ray
@@ -1530,7 +1542,7 @@ def PositioningDirectives_UpdatePosition(oeY: OpticalElement, oeX: OpticalElemen
 			
 			# Set position
 			newXYCentre = oeX.CoreOptics.XYCentre + Pd.Distance * tl.Normalize(RayIn.v)
-			oeY.CoreOptics.SetXYAngle_Centre(newXYCentre, RayIn.Angle, WhichAngle = TypeOfAngle.InputNominal)
+			oeY.CoreOptics.SetXYAngle_Centre(newXYCentre, RayIn.Angle, WhichAngle = TypeOfAngle.INPUT_NOMINAL)
 
 
 			Debug.print('RayIn:= ' + str(RayIn.v), _DebugTab+1)
@@ -1596,7 +1608,7 @@ def PositioningDirectives_UpdatePosition(oeY: OpticalElement, oeX: OpticalElemen
 			d_k = Optics.Detector(
 								L = DetectorSize, 
 								AngleInNominal = np.deg2rad(90) )
-			d_pd = Fundation.PositioningDirectives(
+			d_pd = PositioningDirectives(
 								ReferTo = 'upstream',
 								PlaceWhat = 'centre',
 								PlaceWhere = 'downstream focus',
@@ -1609,7 +1621,7 @@ def PositioningDirectives_UpdatePosition(oeY: OpticalElement, oeX: OpticalElemen
 			# Assemblamento beamline
 			#------------------------------------------------------------
 			t = None
-			t = Fundation.BeamlineElements()
+			t = BeamlineElements()
 			t.Append(FocussingOe)
 			t.Append(d)
 			t.RefreshPositions()		

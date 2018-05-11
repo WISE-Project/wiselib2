@@ -50,11 +50,11 @@ AngleOut : The same as AngleIn, but for the Output beam
 #===============================
 #	 Enum: OPTICS_BEHAVIOUR
 #===============================
-class OPTICS_BEHAVIOUR:
-	Source = 'source'
-	Mirror = 'mirror'
-	Focus = 'focus'
-	Split = 'split'
+class OpticsBehaviour:
+	SOURCE = 'source'
+	MIRROR = 'mirror'
+	FOCUS = 'focus'
+	SPLIT = 'split'
 
 def DiffractionMinimum(Lambda, D, z, Alpha = 0):
 	x0 = Lambda * z / D / np.sin(Alpha)
@@ -64,22 +64,39 @@ def DiffractionMinimum(Lambda, D, z, Alpha = 0):
 #	 TypeOfAngle
 #===============================
 class TypeOfAngle:
-	GrazingNominal = 'grazing'
-	InputNominal = 'input'
-	OutputNominal = 'output'
-	SelfFrameOfReference = 'aixs' # e.g. the x axis of the ellipse. 
-	NormalAbsolute = 'default'
-	TangentAbsolute = 'tangent'
-	Surface = 'default'
-	AxisOrigin = 'axis'
+	GRAZING_NOMINAL = 'grazing'
+	INPUT_NOMINAL = 'input'
+	OUTPUT_NOMINAL = 'output'
+	SELF_FRAME_OF_REFERENCE = 'axis' # e.g. the x axis of the ellipse.
+	NORMAL_ABSOLUTE = 'default'
+	TANGENT_ABSOLUTE = 'tangent'
+	SURFACE = 'default'
+	AXIS_ORIGIN = 'axis'
+
+	def tuple(self):
+		return [self.GRAZING_NOMINAL, self.INPUT_NOMINAL, self.OUTPUT_NOMINAL,
+				self.SELF_FRAME_OF_REFERENCE, self.NORMAL_ABSOLUTE, self.TANGENT_ABSOLUTE]\
+			   #, self.SURFACE, self.AXIS_ORIGIN]
+
 #===============================
 #	 TypeOfXY
 #===============================
 class TypeOfXY:
-	MirrorCentre = 'centre'
-	AxisCentre = 'axis'
-	MirrorStart = 'start'
-	
+	MIRROR_CENTRE = 'centre'
+	AXIS_CENTRE = 'axis'
+	MIRROR_START = 'start'
+
+	def tuple(self):
+		return [self.MIRROR_CENTRE, self.AXIS_CENTRE, self.MIRROR_START]
+
+
+class ReferenceFrame:
+	SELF = 'self'
+	LABORATORY = 'lab'
+
+	def tuple(self):
+		return [self.SELF, self.LABORATORY]
+
 #==============================================================================
 #	 Definition: Ray
 #==============================================================================
@@ -95,7 +112,7 @@ class TypeOfXY:
 class OPTICS_INFO:
 	__TypeStr = 'ts'
 	__TypeDescr = "Type Description"
-	__Behaviour = OPTICS_BEHAVIOUR.Mirror
+	__Behaviour = OpticsBehaviour.MIRROR
 	__IsAnalytic = False
 	__PropList = 	['AngleIn', 'AngleGrazing', 'AngleTan', 'AngleNorm',
 					  'XYStart', 'XYCentre', 'XYEnd']
@@ -673,7 +690,7 @@ class OpticsNumerical(Optics):
 #	 CLASS: SourcePoint
 #==============================================================================
 class SourcePoint(object):
-	_Behaviour = OPTICS_BEHAVIOUR.Source
+	_Behaviour = OpticsBehaviour.SOURCE
 	_IsSource = True
 	_TypeStr = 'point'
 	_TypeDescr = 'point source'
@@ -815,7 +832,7 @@ class SourcePoint(object):
 #	 CLASS: SourcePoint
 #==============================================================================
 class _old(OpticsAnalytical):
-	_Behaviour = OPTICS_BEHAVIOUR.Source
+	_Behaviour = OpticsBehaviour.SOURCE
 	_TypeStr = 'ps'
 	_TypeDescr = 'Point Source'
 	
@@ -906,7 +923,7 @@ def GaussianField(z,r, Lambda, Waist0):
 #	 CLASS: SourceGaussian
 #==============================================================================
 class SourceGaussian(OpticsAnalytical):
-	_Behaviour = OPTICS_BEHAVIOUR.Source
+	_Behaviour = OpticsBehaviour.SOURCE
 	_IsSource = True
 	_TypeStr = 'gauss'
 	_TypeDescr = 'Gaussian Source'
@@ -1177,7 +1194,7 @@ class SourceGaussian(OpticsAnalytical):
 ##	 CLASS: SourceGaussian
 ##==============================================================================
 #class SourceGaussian(object):
-#	_Behaviour = OPTICS_BEHAVIOUR.Source
+#	_Behaviour = OpticsBehaviour.Source
 #	_TypeStr = 'gauss'
 #	_TypeDescr = 'Gaussian Source'
 #	#================================================
@@ -1323,7 +1340,7 @@ class OpticsNumericalDependent(OpticsNumerical):
 
 	_TypeStr = 'NUM'
 	_TypeDescr = "Dependent Numerical"
-	_Behaviour = OPTICS_BEHAVIOUR.Mirror
+	_Behaviour = OpticsBehaviour.MIRROR
 	_IsAnalytic = False
 	_PropList = 	['AngleIn', 'AngleGrazing', 'AngleTan', 'AngleNorm',
 					  'XYStart', 'XYCentre', 'XYEnd']
@@ -2325,7 +2342,7 @@ class MirrorPlane(Mirror):
 	'''
 	_TypeStr = 'PM'
 	_TypeDescr = "Plane Mirror"
-	_Behaviour = OPTICS_BEHAVIOUR.Mirror
+	_Behaviour = OpticsBehaviour.MIRROR
 	_IsAnalytic = False
 	_PropList = 	['AngleIn', 'AngleGrazing', 'AngleTan', 'AngleNorm',
 					  'XYStart', 'XYCentre', 'XYEnd']
@@ -2517,7 +2534,7 @@ class MirrorPlane(Mirror):
  	#================================
 	# SetXYAngle_Centre
 	#================================
-	def SetXYAngle_Centre(self, XYLab_Centre, Angle, WhichAngle =  TypeOfAngle.InputNominal, **kwargs ):
+	def SetXYAngle_Centre(self, XYLab_Centre, Angle, WhichAngle =  TypeOfAngle.INPUT_NOMINAL, **kwargs):
 		'''
 		Set the element XYCentre and orientation angle.
 		CHECK CONTROLLARE: non mi ricordo più che cosa siano gli angoli
@@ -2525,10 +2542,10 @@ class MirrorPlane(Mirror):
 		
 		self.XYCentre = XYLab_Centre
 		
-		if WhichAngle == TypeOfAngle.Surface:  	 	 	 	# Angle is the Normal to the surface
+		if WhichAngle == TypeOfAngle.SURFACE:  	 	 	 	# Angle is the Normal to the surface
 			self.AngleLab = Angle
 		
-		elif WhichAngle == TypeOfAngle.InputNominal: 	 	# Angle is the angle of the input beam	
+		elif WhichAngle == TypeOfAngle.INPUT_NOMINAL: 	 	# Angle is the angle of the input beam
 			self.AngleTanLab = Angle + self.AngleGrazingNominal
 
 		self._UpdateParameters_XYStartEnd()
@@ -2664,7 +2681,7 @@ class MirrorElliptic(Mirror):
 	'''
 	_TypeStr = 'KB'
 	_TypeDescr = "KB Mirror"
-	_Behaviour = OPTICS_BEHAVIOUR.Focus 
+	_Behaviour = OpticsBehaviour.FOCUS
 	_IsAnalytic = False
 #	_PropList = 	['AngleIn', 'AngleGrazing', 'AngleTan', 'AngleNorm',
 #					  'XYStart', 'XYCentre', 'XYEnd']
@@ -4022,7 +4039,7 @@ class MirrorSpheric(Mirror):
 	'''
 	_TypeStr = 'sph'
 	_TypeDescr = "Spheric Mirror"
-	_Behaviour = OPTICS_BEHAVIOUR.Focus 
+	_Behaviour = OpticsBehaviour.FOCUS
 	_IsAnalytic = False
 #	_PropList = 	['AngleIn', 'AngleGrazing', 'AngleTan', 'AngleNorm',
 #					  'XYStart', 'XYCentre', 'XYEnd']

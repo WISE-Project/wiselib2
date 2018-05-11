@@ -42,7 +42,7 @@ if __name__ == '__main__':
     Waist0 = Fermi.Waist0E(Lambda)
     s_k = Optics.SourceGaussian(Lambda, Waist0)      # Kernel delle ottiche
     s_pd = Fundation.PositioningDirectives(            # Direttive di posizionamento
-                        ReferTo = 'absolute', 
+                        ReferTo = Fundation.PositioningDirectives.ReferTo.ABSOLUTE_REFERENCE,
                         XYCentre = [0,0],
                         Angle = deg2rad(0))
     s = OpticalElement(                                    # Optical Element (la cosa più vicina al pupolo Oasys)
@@ -130,7 +130,7 @@ if __name__ == '__main__':
     #%%      Calcolo il campo: sorgente -> specchio
 
     t.ComputationSettings.NPools = 5
-    t.ComputeFields(s,d, Verbose = False)   
+    t.ComputeFields(oeStart=s, oeEnd=d, Verbose = False)
     """
     s = elemento di inizio; d = elemento finale. Se non specificati, li trova lui
     quinti 
@@ -179,10 +179,10 @@ if __name__ == '__main__':
     DefocusList = linspace(-6e-3, 1e-3,   21)
     DefocusList_mm = DefocusList * 1e3
     
-    
-    
-    
-    ResultList, HewList,SigmaList, More = Fundation.FocusSweep(kb, DefocusList, 
+    import copy
+    kb_copy = copy.deepcopy(kb)
+
+    ResultList, HewList,SigmaList, More = Fundation.FocusSweep(kb_copy, DefocusList,
                                                             DetectorSize = 200e-6,
                                                             NPools = 4)
 
