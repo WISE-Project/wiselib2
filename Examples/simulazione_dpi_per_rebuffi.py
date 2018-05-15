@@ -42,7 +42,7 @@ if __name__ == '__main__':
     Waist0 = Fermi.Waist0E(Lambda)
     s_k = Optics.SourceGaussian(Lambda, Waist0)      # Kernel delle ottiche
     s_pd = Fundation.PositioningDirectives(            # Direttive di posizionamento
-                        ReferTo = Fundation.PositioningDirectives.ReferTo.ABSOLUTE_REFERENCE,
+                        ReferTo = Fundation.PositioningDirectives.ReferTo.AbsoluteReference,
                         XYCentre = [0,0],
                         Angle = deg2rad(0))
     s = OpticalElement(                                    # Optical Element (la cosa più vicina al pupolo Oasys)
