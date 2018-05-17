@@ -70,7 +70,10 @@ if __name__ == '__main__':
     f2 = 1.2
     GrazingAngle = deg2rad(2.5)
     L = 0.4 
-    
+
+    ob = Optics.Obstruction()
+
+
     kb_k = Optics.MirrorElliptic(f1 = f1, f2 = f2 , L= L, Alpha = GrazingAngle)
     kb_pd = Fundation.PositioningDirectives(
                         ReferTo = 'source',
