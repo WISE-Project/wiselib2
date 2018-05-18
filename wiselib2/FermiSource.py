@@ -92,7 +92,7 @@ class Dpi:
 def Fel(object):
     def __init__(Lambda):
         
-        theta_I = TehtaI(Lambda)
+        theta_I = ThetaI(Lambda)
         Waist0 = Waist0E(Lambda)
          
         source_k = Optics.SourceGaussian(Lambda, Waist0)

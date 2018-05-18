@@ -67,7 +67,7 @@ class TypeOfAngle:
 	GrazingNominal = 'grazing'
 	InputNominal = 'input'
 	OutputNominal = 'output'
-	SelfFrameOfReference = 'aixs' # e.g. the x axis of the ellipse.
+	SelfFrameOfReference = 'axis' # e.g. the x axis of the ellipse.
 	NormalAbsolute = 'default'
 	TangentAbsolute = 'tangent'
 	Surface = 'default'
