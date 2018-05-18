@@ -19,10 +19,10 @@ README_FILE = os.path.join(os.path.dirname(__file__), 'README.txt')
 LONG_DESCRIPTION = open(README_FILE).read()
 AUTHOR = 'Michele Manfredda and Lorenzo Raimondi'
 AUTHOR_EMAIL = 'michele.manfredda@elettra.eu, lorenzo.raimondi@elettra.eu'
-URL = 'https://github.com/lucarebuffi/wiselib'
-DOWNLOAD_URL = 'https://github.com/lucarebuffi/wiselib'
-MAINTAINER = 'Luca Rebuffi'
-MAINTAINER_EMAIL = 'luca.rebuffi@elettra.eu'
+URL = 'https://github.com/oasys-elettra-kit/wiselib2'
+DOWNLOAD_URL = 'https://github.com/oasys-elettra-kit/wiselib2'
+MAINTAINER = 'Michele Manfredda'
+MAINTAINER_EMAIL = 'michele.manfredda@elettra.eu'
 LICENSE = 'GPLv3'
 
 KEYWORDS = (
@@ -86,7 +86,7 @@ def git_version():
     return GIT_REVISION
 
 
-def write_version_py(filename='wiselib/version.py'):
+def write_version_py(filename='wiselib2/version.py'):
     # Copied from numpy setup.py
     cnt = """
 # THIS FILE IS GENERATED FROM OASYS SETUP.PY
@@ -105,7 +105,7 @@ if not release:
         GIT_REVISION = git_version()
     elif os.path.exists('wiselib/version.py'):
         # must be a source distribution, use existing version file
-        version = imp.load_source("wiselib.version", "wiselib/version.py")
+        version = imp.load_source("wiselib2.version", "wiselib2/version.py")
         GIT_REVISION = version.git_revision
     else:
         GIT_REVISION = "Unknown"
