@@ -107,6 +107,7 @@ class PositioningDirectives:
 		UpstreamElement = 'upstream'
 		DownstreamElement = 'downstream'
 		DoNotMove = 'fix'
+		Source = 'source'
 
 	class WhichAngle:
 		AxisOfTheSelfReferenceFrame = 'self' #default configuration
