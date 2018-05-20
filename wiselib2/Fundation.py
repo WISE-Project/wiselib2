@@ -395,12 +395,12 @@ class Tree(object):
 				# NewItem will be the first one of the tree
 				if ItemA.Parent is None:
 					# update NewItem
-					NewItem.Parent = []
-					NewItem.Children = ItemA
+					NewItem.Parent = None
+					NewItem.Children = [ItemA]
 					# update ItemA
 					ItemA.Parent = NewItem
 					# update Tree Prop
-					self.FirstItem = NewItem
+					self._FirstItem = NewItem
 				# NewItem is a generic item
 				else:
 					pass
@@ -556,7 +556,7 @@ class OpticalElement(TreeItem):
 		# If oe0 is analytical, info on oe2 are used.
 		Debug.Print('GetNSamples:', 0)
 		Debug.Print('Current: %s' % self.Name,  1 )
-		Debug.Print('Upstream Element %s' % self.Parent.Name, 1 )
+		Debug.Print('Upstream Element %s' % "None" if self.Parent is None else self.Parent.Name, 1 )
 
 
 		if (self.ComputationSettings.UseCustomSampling == True) or (Lambda is None) :

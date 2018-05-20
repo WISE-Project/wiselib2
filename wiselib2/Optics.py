@@ -4963,8 +4963,8 @@ class TransmissionMask(MirrorPlane):
 	#================================
 	# FUN: __init__
 	#================================	
-	def __init__(self):
-		super().__init__()
+	def __init__(self, L):
+		super().__init__(L=L, AngleGrazing=np.deg2rad(90))
 	
 	pass
 
