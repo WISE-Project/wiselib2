@@ -62,8 +62,10 @@ if __name__ == '__main__':
     pm1a = OpticalElement(pm1a_k, 
                             PositioningDirectives = pm1a_pd, 
                             Name = 'pm1a')
-    pm1a.ComputationSettings.Ignore = True          # Lo user decide di non simulare lo specchio ()
-    
+    pm1a.ComputationSettings.Ignore = False          # Lo user decide di non simulare lo specchio ()
+    pm1a.ComputationSettings.UseCustomSampling = UseCustomSampling # l'utente decide di impostare a mano il campionamento
+    pm1a.ComputationSettings.NSamples = N
+
     # KB(h)
     #==========================================================================
     f1 = 98
@@ -72,7 +74,6 @@ if __name__ == '__main__':
     L = 0.4 
 
     #ob = Optics.Obstruction()
-
 
     kb_k = Optics.MirrorElliptic(f1 = f1, f2 = f2 , L= L, Alpha = GrazingAngle)
     kb_pd = Fundation.PositioningDirectives(
@@ -122,7 +123,7 @@ if __name__ == '__main__':
     t = None
     t = Fundation.BeamlineElements()
     t.Append(s)
-#    t.Append(pm1a)         # per ora lo lasciamo commentato, devo aggiustare una cosa che si è rotta 2 gg fa
+    t.Append(pm1a)         # per ora lo lasciamo commentato, devo aggiustare una cosa che si è rotta 2 gg fa
     t.Append(kb)
     t.Append(d)
     t.RefreshPositions()
@@ -178,38 +179,38 @@ if __name__ == '__main__':
         
 
 #%% Caustica
+    if 1==0:
+        DefocusList = linspace(-6e-3, 1e-3,   21)
+        DefocusList_mm = DefocusList * 1e3
 
-    DefocusList = linspace(-6e-3, 1e-3,   21)
-    DefocusList_mm = DefocusList * 1e3
-    
-    import copy
-    kb_copy = copy.deepcopy(kb)
+        import copy
+        kb_copy = copy.deepcopy(kb)
 
-    ResultList, HewList,SigmaList, More = Fundation.FocusSweep(kb_copy, DefocusList,
-                                                            DetectorSize = 200e-6,
-                                                            NPools = 4)
+        ResultList, HewList,SigmaList, More = Fundation.FocusSweep(kb_copy, DefocusList,
+                                                                DetectorSize = 200e-6,
+                                                                NPools = 4)
 
-    N = len(ResultList)
-    
-    # Plotta il campo sui detector a varie distanze
-    if 1==1:
-        plt.figure(23)
-        for Res in ResultList:
-            plt.plot(Res.S *1e6, abs(Res.Field))
-            plt.title('Campo')
-            plt.xlabel('um')
-            
+        N = len(ResultList)
+
+        # Plotta il campo sui detector a varie distanze
+        if 1==1:
+            plt.figure(23)
+            for Res in ResultList:
+                plt.plot(Res.S *1e6, abs(Res.Field))
+                plt.title('Campo')
+                plt.xlabel('um')
 
 
-#%% Plot della HEW
-    
-    plt.figure(32)
-    plt.plot(DefocusList_mm, HewList,'.')
-    plt.plot(DefocusList_mm, 2*0.68* SigmaList,'x')
-    
-    plt.xlabel('defocus (mm)')
-    plt.ylabel('Hew')
-    plt.legend(['Hew', '0.68 * 2 Sigma'])
+
+    #%% Plot della HEW
+
+        plt.figure(32)
+        plt.plot(DefocusList_mm, HewList,'.')
+        plt.plot(DefocusList_mm, 2*0.68* SigmaList,'x')
+
+        plt.xlabel('defocus (mm)')
+        plt.ylabel('Hew')
+        plt.legend(['Hew', '0.68 * 2 Sigma'])
 
 
     plt.show()

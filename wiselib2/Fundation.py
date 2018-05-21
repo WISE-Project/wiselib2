@@ -479,8 +479,6 @@ class OpticalElement(TreeItem):
 
 		self.Results = ComputationResults()
 
-
-
 		# Item is a class of Optics. Object is created (not recommended)
 		if inspect.isclass(Element):
 			Class = Element
@@ -911,6 +909,7 @@ class BeamlineElements(Tree):
 		else:
 			Lambda = oeStart.ComputationResults.Lambda
 
+		print("LAMBDAAAAAAAA", Lambda)
 
 		k = 0
 		Ind = 1
@@ -928,6 +927,7 @@ class BeamlineElements(Tree):
 			# case: the present element must be Ignored
 			#----------------------------------------------
 			elif (oeThis.ComputationSettings.Ignore == True):
+				oeThis.Results.Lambda = Lambda
 				PropInfo.TotalPath += oeThis.DistanceFromParent
 				PropInfo.N += 1
 
@@ -935,6 +935,7 @@ class BeamlineElements(Tree):
 			# case:  Compute the field (on this element)
 			#----------------------------------------------
 			else:
+				oeThis.Results.Lambda = Lambda
 
 				#----------------------------------------------
 				# oeLast is Analitical
@@ -971,6 +972,7 @@ class BeamlineElements(Tree):
 												xV,
 												yV,
 												Lambda = Lambda)
+
 						#-----------------------------------------------------
 
 						xThis, yThis = oeThis.GetXY(NSamples)
@@ -1031,7 +1033,6 @@ class BeamlineElements(Tree):
 												Lambda = Lambda,
 												E0 = PropInfo.oeLast.Results.Field ,
 												NPools = self.ComputationSettings.NPools )
-
 
 
 						xLast, yLast = PropInfo.oeLast.GetXY(NSamples)

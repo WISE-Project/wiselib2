@@ -130,9 +130,23 @@ PACKAGES = [
 PACKAGE_DATA = {
 }
 
+#import shutil, sys
+
+#from distutils.core import setup
+from distutils.extension import Extension
+
+ext_modules=[
+    Extension("wiselib2.Rayman",               ["wiselib2/Rayman.pyx"]),
+#    Extension("orangecontrib.xrdanalyzer.controller.fit.fitters.fitter_minpack",       ["orangecontrib/xrdanalyzer/controller/fit/fitters/fitter_minpack.pyx"]),
+#    Extension("orangecontrib.xrdanalyzer.controller.fit.fitters.fitter_minpack_util",  ["orangecontrib/xrdanalyzer/controller/fit/fitters/fitter_minpack_util.pyx"]),
+]
+
 
 def setup_package():
     write_version_py()
+
+    from Cython.Distutils import build_ext
+
     setup(
         name=NAME,
         version=VERSION,
@@ -154,6 +168,8 @@ def setup_package():
         include_package_data=True,
         install_requires=INSTALL_REQUIRES,
         setup_requires=SETUP_REQUIRES,
+        #cmdclass = {'build_ext': build_ext},
+        #ext_modules = ext_modules,
     )
 
 if __name__ == '__main__':
