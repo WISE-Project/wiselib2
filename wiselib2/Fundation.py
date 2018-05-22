@@ -909,8 +909,6 @@ class BeamlineElements(Tree):
 		else:
 			Lambda = oeStart.ComputationResults.Lambda
 
-		print("LAMBDAAAAAAAA", Lambda)
-
 		k = 0
 		Ind = 1
 		for oeThis in oeList:
