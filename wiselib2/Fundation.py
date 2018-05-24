@@ -887,7 +887,7 @@ class BeamlineElements(Tree):
 			TotalPath = 0			#path from the last active element used.
 			N = 0
 
-		PropInfo.oeLast = self.FirstItem
+		#PropInfo.oeLast = self.FirstItem # BUGGGGGG!!!!!
 
 		oeList, oeStart, oeEnd = self._PickOeList(oeStart, oeEnd)
 
