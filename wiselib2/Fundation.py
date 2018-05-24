@@ -891,6 +891,8 @@ class BeamlineElements(Tree):
 
 		oeList, oeStart, oeEnd = self._PickOeList(oeStart, oeEnd)
 
+		PropInfo.oeLast = self.FirstItem if oeStart.Parent is None else oeStart.Parent
+
 #		oeStart = self.FirstItem if oeStart is None else oeStart
 #		oeEnd = self.LastItem if oeEnd is None else oeEnd
 #		#Picking just a subportion of oeList, if required by oeStart, oeEnd
