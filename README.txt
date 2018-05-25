@@ -1,5 +1,5 @@
 WISE 2 library
-======
+===============
 
 Kernel classes for WISE 2 in python
 

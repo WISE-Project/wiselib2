@@ -11,8 +11,8 @@ except AttributeError:
 
 NAME = 'wiselib2'
 
-VERSION = '0.0.1'
-ISRELEASED = False
+VERSION = '1.0.0'
+ISRELEASED = True
 
 DESCRIPTION = 'WISE 2 kernel library'
 README_FILE = os.path.join(os.path.dirname(__file__), 'README.txt')
@@ -133,13 +133,13 @@ PACKAGE_DATA = {
 #import shutil, sys
 
 #from distutils.core import setup
-from distutils.extension import Extension
+#from distutils.extension import Extension
 
-ext_modules=[
-    Extension("wiselib2.Rayman",               ["wiselib2/Rayman.pyx"]),
+#ext_modules=[
+#    Extension("wiselib2.Rayman",               ["wiselib2/Rayman.pyx"]),
 #    Extension("orangecontrib.xrdanalyzer.controller.fit.fitters.fitter_minpack",       ["orangecontrib/xrdanalyzer/controller/fit/fitters/fitter_minpack.pyx"]),
 #    Extension("orangecontrib.xrdanalyzer.controller.fit.fitters.fitter_minpack_util",  ["orangecontrib/xrdanalyzer/controller/fit/fitters/fitter_minpack_util.pyx"]),
-]
+#]
 
 
 def setup_package():
