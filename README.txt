@@ -1,7 +1,7 @@
-WISE 2 library
+WISEr library
 ===============
 
-Kernel classes for WISE 2 in python
+Kernel classes for WISEr in python
 
 wiselib package requires Python 3.3 or newer.
 

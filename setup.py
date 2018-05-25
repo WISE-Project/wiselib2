@@ -11,7 +11,7 @@ except AttributeError:
 
 NAME = 'wiselib2'
 
-VERSION = '1.0.0'
+VERSION = '1.0.1'
 ISRELEASED = True
 
 DESCRIPTION = 'WISE 2 kernel library'
@@ -145,7 +145,7 @@ PACKAGE_DATA = {
 def setup_package():
     write_version_py()
 
-    from Cython.Distutils import build_ext
+    #from Cython.Distutils import build_ext
 
     setup(
         name=NAME,
