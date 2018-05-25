@@ -2466,7 +2466,8 @@ class MirrorPlane(Mirror):
  	#================================
 	# GetXY_IdealMirror(N)
 	#================================
-	def GetXY_IdealMirror(self, N = 100  ):
+	#def GetXY_IdealMirror(self, N = 100 ): # REMOVED BY LUCA REBUFFI
+	def GetXY_IdealMirror(self, N = 100, Sign = +1, ReferenceFrame = 'lab', L = None  ):
 		'''
 		Return the coordinates of the ideal mirror.
 
