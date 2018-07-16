@@ -11,7 +11,7 @@ except AttributeError:
 
 NAME = 'wiselib2'
 
-VERSION = '1.0.1'
+VERSION = '1.0.2'
 ISRELEASED = True
 
 DESCRIPTION = 'WISE 2 kernel library'
